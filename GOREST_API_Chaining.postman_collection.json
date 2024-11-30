@@ -1,0 +1,247 @@
+{
+	"info": {
+		"_postman_id": "69a4995a-6174-4971-a1d9-eadaf1ec9019",
+		"name": "GOREST_API_Chaining",
+		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json",
+		"_exporter_id": "35143598"
+	},
+	"item": [
+		{
+			"name": "Create a new user",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"const respongore=pm.response.json();\r",
+							"\r",
+							"pm.environment.set(\"gorest_id\",respongore.id);\r",
+							"console.log(pm.environment.get(\"gorest_id\"));\r",
+							"\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"var random=Math.random().toString(36).substring(2);\r",
+							"\r",
+							"var emailid=\"jim\"+random+\"@gmail.com\";\r",
+							"var username=\"kum\"+random;\r",
+							"\r",
+							"console.log(random+\"v----\");\r",
+							"\r",
+							"pm.environment.set(\"email_id_env\",emailid);\r",
+							"\r",
+							"console.log(pm.environment.get(\"email_id_env\"));\r",
+							"pm.environment.set(\"user_id_env\",username);\r",
+							"\r",
+							"\r",
+							"\r",
+							"\r",
+							"\r",
+							"\r",
+							"\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n\"name\": \"{{user_id_env}}\",\r\n\"gender\": \"male\",\r\n\"email\": \"{{email_id_env}}\",\r\n\"status\": \"inactive\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": "https://gorest.co.in/public/v2/users"
+			},
+			"response": []
+		},
+		{
+			"name": "Get User Details",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"var respo=pm.response.json();\r",
+							"\r",
+							"pm.test(\"validating resposne \",()=>{\r",
+							"   // pm.environment.get(\"user_id_env\");\r",
+							"    pm.expect(respo.name).to.be.eql(pm.environment.get(\"user_id_env\"));\r",
+							"    pm.expect(respo.id).to.be.eql(pm.environment.get(\"gorest_id\"));\r",
+							"    \r",
+							"    pm.expect(respo.email).to.eql(pm.environment.get(\"email_id_env\"));\r",
+							"\r",
+							"})\r",
+							"\r",
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"pm.test(\"Response time is less than 200ms\", function () {\r",
+							"    pm.expect(pm.response.responseTime).to.be.below(2000);\r",
+							"});\r",
+							"pm.test(\"Successful POST request\", function () {\r",
+							"    pm.expect(pm.response.code).to.be.oneOf([200, 202]);\r",
+							"});\r",
+							"pm.test(\"Status code name has string\", function () {\r",
+							"    pm.response.to.have.status(\"OK\");\r",
+							"});\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": "https://gorest.co.in/public/v2/users/{{gorest_id}}"
+			},
+			"response": []
+		},
+		{
+			"name": "Update user details",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"var random=Math.random().toString(36).substring(2);\r",
+							"\r",
+							"console.log(random);\r",
+							"\r",
+							"var emailid=\"jim\"+random+\"@gmail.com\";\r",
+							"var username=\"kum\"+random;\r",
+							"\r",
+							"pm.environment.set(\"email_id_env\",emailid);\r",
+							"\r",
+							"console.log(pm.environment.get(\"email_id_env\"));\r",
+							"pm.environment.set(\"user_id_env\",username);"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"const update_goret = pm.response.json();\r",
+							"\r",
+							"console.log(update_goret);\r",
+							"\r",
+							"\r",
+							"\r",
+							"pm.environment.set(\"upadtego_rest_id\",update_goret.id);\r",
+							"\r",
+							"console.log(pm.environment.get(\"upadtego_rest_id\"));\r",
+							"\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n\"name\": \"{{user_id_env}}\",\r\n\r\n\"email\": \"{{email_id_env}}\",\r\n\"status\": \"active\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": "https://gorest.co.in/public/v2/users/{{gorest_id}}"
+			},
+			"response": []
+		},
+		{
+			"name": "Delete user",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.environment.unset(\"email_id_env\");\r",
+							"pm.environment.unset(\"user_id_env\");\r",
+							"pm.environment.unset(\"gorest_id\");"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n\"name\": \"ajay\",\r\n\"gender\": \"male\",\r\n\"email\": \"sxoskks@gmail.com\",\r\n\"status\": \"inactive\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": "https://gorest.co.in/public/v2/users/{{gorest_id}}"
+			},
+			"response": []
+		}
+	],
+	"auth": {
+		"type": "bearer",
+		"bearer": {
+			"token": "c650d457ccb65321419ddbd3f58e99415228c1766b43a50af8ee54a66391a924"
+		}
+	},
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		}
+	]
+}
